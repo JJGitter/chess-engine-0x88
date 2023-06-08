@@ -20,7 +20,7 @@ void generateMoves();
 //main driver
 int main() {
 
-    parseFEN("r3k2r/p1ppqpb1/bn2pnp1/3PN3/Pp2P3/2N2Q1p/1pPBBPPP/r3K2R b KQkq a3 0 1");
+    parseFEN("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
     printBoard();
     generateMoves();
 
@@ -88,6 +88,30 @@ void generateMoves(){
                         }
                     }
                 }
+                // white king castling
+                if (board[square] == K){
+                    // if king side castling is available
+                    if (castle & KC){
+                        // make sure there are empty squares between king and rook
+                        if (board[f1] == 0 && board[g1] == 0) {
+                            // make sure king & neighbour square are not in check
+                            if (!isSquareAttacked(e1, black) && !isSquareAttacked(f1, black))
+                                printf("%s%s\n", "e1", "g1");
+
+                        }
+                    }
+
+                    // if queen side castling is available
+                    if (castle & QC){
+                        // make sure there are empty squares between king and rook
+                        if ( board[b1] == 0 && board[c1] == 0 && board[d1] == 0 ) {
+                            // make sure king & neighbour square are not in check
+                            if (!isSquareAttacked(e1, black) && !isSquareAttacked(d1, black))
+                                printf("%s%s\n", "e1", "c1");
+
+                        }
+                    }
+                }
             }
             //black pawn and castling moves
             else{
@@ -143,6 +167,30 @@ void generateMoves(){
                                 }
                                 
                             }
+                        }
+                    }
+                }
+                // black king castling
+                if (board[square] == k){
+                    // if king side castling is available
+                    if (castle & kc){
+                        // make sure there are empty squares between king and rook
+                        if (board[f8] == 0 && board[g8] == 0) {
+                            // make sure king & neighbour square are not in check
+                            if (!isSquareAttacked(e8, white) && !isSquareAttacked(f8, white))
+                                printf("%s%s\n", "e8", "g8");
+
+                        }
+                    }
+
+                    // if queen side castling is available
+                    if (castle & qc){
+                        // make sure there are empty squares between king and rook
+                        if ( board[b8] == 0 && board[c8] == 0 && board[d8] == 0 ) {
+                            // make sure king & neighbour square are not in check
+                            if (!isSquareAttacked(e8, white) && !isSquareAttacked(d8, white))
+                                printf("%s%s\n", "e8", "c8");
+
                         }
                     }
                 }
