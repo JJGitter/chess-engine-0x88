@@ -1,4 +1,4 @@
-//https://www.youtube.com/watch?v=lgq2dD26MjQ&list=PLmN0neTso3JzhJP35hwPHJi4FZgw5Ior0&index=7
+//https://www.youtube.com/watch?v=CrP1LHEyDoE&list=PLmN0neTso3JzhJP35hwPHJi4FZgw5Ior0&index=8
 
 //headers
 #include <stdio.h>
@@ -20,7 +20,7 @@ void generateMoves();
 //main driver
 int main() {
 
-    parseFEN("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPpP/R3K2R b KQkq - 0 1");
+    parseFEN("r3k2r/p1ppqpb1/bn2pnp1/3PN3/Pp2P3/2N2Q1p/1pPBBPPP/r3K2R b KQkq a3 0 1");
     printBoard();
     generateMoves();
 
@@ -34,12 +34,12 @@ void generateMoves(){
         if(!(square & 0x88)){
             // white pawn and castling moves
             if(!sideToMove){
-                // quite white pawn moves
+                // white pawn moves
                 if(board[square] == P){
                     // init target square
                     int to_square = square - 16;
 
-                    // check if target square is on board and empty
+                    // quiet white pawn moves. Check if target square is on board and empty
                     if(!(to_square & 0x88) && !board[to_square]){
                         // pawn promotions
                         if(square >= a7 && square <= h7){
@@ -52,8 +52,38 @@ void generateMoves(){
                             printf("%s%s\n", square_to_coords[square], square_to_coords[to_square]);
 
                             // two squares ahead pawn move
-                            if((square >= a2 && square <= h2) && !board[square - 32]){
+                            if((square >= a2 && square <= h2) && !board[square - 32])
                                 printf("%s%s\n", square_to_coords[square], square_to_coords[square - 32]);
+                        }
+                    }
+                    // white pawn capture moves
+                    for (int index = 0; index < 4; index++){
+                        int pawn_offset = bishop_offsets[index];
+
+                        // white pawn offsets
+                        if (pawn_offset < 0){
+                            int to_square = square + pawn_offset;
+                            // check if target square is on board
+                            if (!(to_square & 0x88)){
+                                // capture pawn promotion
+                                if (
+                                    (square >= a7 && square <= h7) && 
+                                    (board[to_square] >= p && board[to_square] <= k)
+                                    ){
+                                    printf("%s%sq\n", square_to_coords[square], square_to_coords[to_square]);
+                                    printf("%s%sr\n", square_to_coords[square], square_to_coords[to_square]);
+                                    printf("%s%sb\n", square_to_coords[square], square_to_coords[to_square]);
+                                    printf("%s%sn\n", square_to_coords[square], square_to_coords[to_square]);
+                                }else{
+                                    // casual capture
+                                    if ((board[to_square] >= p && board[to_square] <= k)){
+                                        printf("%s%s\n", square_to_coords[square], square_to_coords[to_square]);
+                                    }
+                                    // enPassant capture
+                                    if(to_square == enPassantSquare)
+                                        printf("%s%s\n", square_to_coords[square], square_to_coords[to_square]);
+                                }
+                                
                             }
                         }
                     }
@@ -61,12 +91,12 @@ void generateMoves(){
             }
             //black pawn and castling moves
             else{
-                // quite black pawn moves
+                // black pawn moves
                 if(board[square] == p){
                     // init target square
                     int to_square = square + 16;
 
-                    // check if target square is on board and empty
+                    // quite black pawn moves. check if target square is on board and empty
                     if(!(to_square & 0x88) && !board[to_square]){
                         // pawn promotions
                         if(square >= a2 && square <= h2){
@@ -84,8 +114,38 @@ void generateMoves(){
                             }
                         }
                     }
-                }
+                    // black pawn capture moves
+                    for (int index = 0; index < 4; index++){
+                        int pawn_offset = bishop_offsets[index];
 
+                        // black pawn offsets
+                        if (pawn_offset > 0){
+                            int to_square = square + pawn_offset;
+                            // check if target square is on board
+                            if (!(to_square & 0x88)){
+                                // capture pawn promotion
+                                if (
+                                    (square >= a2 && square <= h2) && 
+                                    (board[to_square] >= P && board[to_square] <= K)
+                                    ){
+                                    printf("%s%sq\n", square_to_coords[square], square_to_coords[to_square]);
+                                    printf("%s%sr\n", square_to_coords[square], square_to_coords[to_square]);
+                                    printf("%s%sb\n", square_to_coords[square], square_to_coords[to_square]);
+                                    printf("%s%sn\n", square_to_coords[square], square_to_coords[to_square]);
+                                }else{
+                                    // casual capture
+                                    if ((board[to_square] >= P && board[to_square] <= K)){
+                                        printf("%s%s\n", square_to_coords[square], square_to_coords[to_square]);
+                                    }
+                                    // enPassant capture
+                                    if(to_square == enPassantSquare)
+                                        printf("%s%s\n", square_to_coords[square], square_to_coords[to_square]);
+                                }
+                                
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -247,7 +307,7 @@ void printBoard(){
                                     (castle & QC) ? 'Q' : '-', 
                                     (castle & kc) ? 'k' : '-', 
                                     (castle & qc) ? 'q' : '-');
-    printf("    enPassant:    %s\n", square_to_coords[enPassantSquare]);
+    printf("    enPassant:    %s\n", (enPassantSquare != no_square ? square_to_coords[enPassantSquare] : "--")  );
     
     printf("\n\n");
 }
