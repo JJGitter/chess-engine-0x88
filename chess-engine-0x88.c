@@ -1,4 +1,4 @@
-//https://www.youtube.com/watch?v=CrP1LHEyDoE&list=PLmN0neTso3JzhJP35hwPHJi4FZgw5Ior0&index=8
+//https://www.youtube.com/watch?v=mvQ5qQxUvH4&list=PLmN0neTso3JzhJP35hwPHJi4FZgw5Ior0&index=9
 
 //headers
 #include <stdio.h>
@@ -20,7 +20,7 @@ void generateMoves();
 //main driver
 int main() {
 
-    parseFEN("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
+    parseFEN("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1");
     printBoard();
     generateMoves();
 
