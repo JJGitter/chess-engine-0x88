@@ -1,4 +1,5 @@
-//https://www.youtube.com/watch?v=mvQ5qQxUvH4&list=PLmN0neTso3JzhJP35hwPHJi4FZgw5Ior0&index=9
+//https://www.youtube.com/watch?v=p2QwBIlwwRA&list=PLmN0neTso3JzhJP35hwPHJi4FZgw5Ior0&index=10
+
 
 //headers
 #include <stdio.h>
@@ -94,7 +95,7 @@ void generateMoves(){
                     if (castle & KC){
                         // make sure there are empty squares between king and rook
                         if (board[f1] == 0 && board[g1] == 0) {
-                            // make sure king & neighbour square are not in check
+                            // make sure king & neighbour square are not under attack
                             if (!isSquareAttacked(e1, black) && !isSquareAttacked(f1, black))
                                 printf("%s%s\n", "e1", "g1");
 
@@ -105,7 +106,7 @@ void generateMoves(){
                     if (castle & QC){
                         // make sure there are empty squares between king and rook
                         if ( board[b1] == 0 && board[c1] == 0 && board[d1] == 0 ) {
-                            // make sure king & neighbour square are not in check
+                            // make sure king & neighbour square are not under attack
                             if (!isSquareAttacked(e1, black) && !isSquareAttacked(d1, black))
                                 printf("%s%s\n", "e1", "c1");
 
@@ -176,7 +177,7 @@ void generateMoves(){
                     if (castle & kc){
                         // make sure there are empty squares between king and rook
                         if (board[f8] == 0 && board[g8] == 0) {
-                            // make sure king & neighbour square are not in check
+                            // make sure king & neighbour square are not under attack
                             if (!isSquareAttacked(e8, white) && !isSquareAttacked(f8, white))
                                 printf("%s%s\n", "e8", "g8");
 
@@ -187,9 +188,72 @@ void generateMoves(){
                     if (castle & qc){
                         // make sure there are empty squares between king and rook
                         if ( board[b8] == 0 && board[c8] == 0 && board[d8] == 0 ) {
-                            // make sure king & neighbour square are not in check
+                            // make sure king & neighbour square are not under attack
                             if (!isSquareAttacked(e8, white) && !isSquareAttacked(d8, white))
                                 printf("%s%s\n", "e8", "c8");
+
+                        }
+                    }
+                }
+            }
+            // knight moves
+            if(sideToMove == white ? board[square] == N : board[square] == n){
+                // loop over knight move offsets
+                for(int index = 0; index < 8; index++){
+                    // initialize target square
+                    int to_square = square + knight_offsets[index];
+
+                    // initialize target piece
+                    int piece = board[to_square];
+
+                    // make sure target square is on board
+                    if(!(to_square & 0x88)){
+                        //
+                        if(
+                            sideToMove == white ? 
+                            (piece == e || (piece >= p && piece <= k)) : 
+                            (piece == e || (piece >= P && piece <= K))
+                        ){
+                            // on capture
+                            if(piece != e){
+                                printf("%s%s\n", square_to_coords[square], square_to_coords[to_square]);
+
+                            // on empty square
+                            }else{
+                                printf("%s%s\n", square_to_coords[square], square_to_coords[to_square]);
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            // king moves
+            if(sideToMove == white ? board[square] == K : board[square] == k){
+                // loop over king move offsets
+                for(int index = 0; index < 8; index++){
+                    // initialize target square
+                    int to_square = square + king_offsets[index];
+
+                    // initialize target piece
+                    int piece = board[to_square];
+
+                    // make sure target square is on board
+                    if(!(to_square & 0x88)){
+                        //
+                        if(
+                            sideToMove == white ? 
+                            (piece == e || (piece >= p && piece <= k)) : 
+                            (piece == e || (piece >= P && piece <= K))
+                        ){
+                            // on capture
+                            if(piece != e){
+                                printf("%s%s\n", square_to_coords[square], square_to_coords[to_square]);
+
+                            // on empty square
+                            }else{
+                                printf("%s%s\n", square_to_coords[square], square_to_coords[to_square]);
+                            }
 
                         }
                     }
