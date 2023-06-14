@@ -1,5 +1,4 @@
-//https://www.youtube.com/watch?v=p2QwBIlwwRA&list=PLmN0neTso3JzhJP35hwPHJi4FZgw5Ior0&index=10
-
+//https://www.youtube.com/watch?v=7_QP8Rk9TE8&list=PLmN0neTso3JzhJP35hwPHJi4FZgw5Ior0&index=11
 
 //headers
 #include <stdio.h>
@@ -21,7 +20,7 @@ void generateMoves();
 //main driver
 int main() {
 
-    parseFEN("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1");
+    parseFEN(tricky_position);
     printBoard();
     generateMoves();
 
@@ -254,8 +253,99 @@ void generateMoves(){
                             }else{
                                 printf("%s%s\n", square_to_coords[square], square_to_coords[to_square]);
                             }
-
                         }
+                    }
+                }
+            }
+
+            // bishop and queen moves
+            if (
+                sideToMove == white ? 
+                board[square] == B || board[square] == Q : 
+                board[square] == b || board[square] == q
+                )
+            {
+                // loop over bishop & queen offsets
+                for (int index = 0; index < 4; index++){
+                    // init target square
+                    int to_square = square + bishop_offsets[index];
+
+                    // loop over attack ray
+                    while (!(to_square & 0x88)){
+                        //init target piece
+                        int piece = board[to_square];
+                        // if hits own piece
+                        if (
+                            sideToMove == white ? 
+                            board[to_square] >=P && board[to_square] <=K : 
+                            board[to_square] >=p && board[to_square] <=k
+                            ){
+                                break;
+                            }
+
+                        // if hits opponent's piece
+                        if (
+                            sideToMove == white ? 
+                            board[to_square] >=p && board[to_square] <=k : 
+                            board[to_square] >=P && board[to_square] <=K
+                            ){
+                                printf("%s%s\n", square_to_coords[square], square_to_coords[to_square]);
+                                break;
+                            }
+
+                        // if steps into an empty square
+                        if (piece == e){
+                            printf("%s%s\n", square_to_coords[square], square_to_coords[to_square]);
+                        }
+
+                        //increment target square
+                        to_square += bishop_offsets[index];
+                    }
+                }
+            }
+
+            // rook and queen moves
+            if (
+                sideToMove == white ? 
+                board[square] == R || board[square] == Q : 
+                board[square] == r || board[square] == q
+                )
+            {
+                // loop over rook & queen offsets
+                for (int index = 0; index < 4; index++){
+                    // init target square
+                    int to_square = square + rook_offsets[index];
+
+                    // loop over attack ray
+                    while (!(to_square & 0x88)){
+                        //init target piece
+                        int piece = board[to_square];
+                        // if hits own piece
+                        if (
+                            sideToMove == white ? 
+                            board[to_square] >=P && board[to_square] <=K : 
+                            board[to_square] >=p && board[to_square] <=k
+                            ){
+                                break;
+                            }
+
+                        // if hits opponent's piece
+                        if (
+                            sideToMove == white ? 
+                            board[to_square] >=p && board[to_square] <=k : 
+                            board[to_square] >=P && board[to_square] <=K
+                            ){
+                                printf("%s%s\n", square_to_coords[square], square_to_coords[to_square]);
+                                break;
+                            }
+
+                        // if steps into an empty square
+                        if (piece == e){
+                            printf("%s%s\n", square_to_coords[square], square_to_coords[to_square]);
+                        }
+
+                        //increment target square
+                        to_square += rook_offsets[index];
                     }
                 }
             }
